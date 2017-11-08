@@ -108,9 +108,9 @@ plt.title('Análisis de completitud del catálogo sísmico')
 plt.xlabel('Magnitud')
 plt.ylabel('Log(N)')
 log16 = d[7]
-log9 = d[0]
-bm = (log16 - log9) / 3.5  # A Y B MAXIMUM LIKEHOOD
-am = log9 + 4.5 * bm
+log8 = d[0]
+bm = (log16 - log8) / 4.0  # A Y B MAXIMUM LIKEHOOD
+am = log8 + 4.5 * bm
 arregloult = np.linalg.lstsq(G, d)  # Mínimos cuadrados
 b, a = arregloult[0]
 print b  # b y a dados por mínimos cuadrados
@@ -145,7 +145,16 @@ R = (pearson_def(d, arreglo)) ** 2  # R^2
 print R
 cov = np.linalg.inv(np.matmul(Gt, G))
 print cov
-oa = math.sqrt(cov[0][0])
-print oa
-ob = math.sqrt(cov[1][1])
+ob = math.sqrt(cov[0][0])
 print ob
+oa = math.sqrt(cov[1][1])
+print oa
+"Distribucion de Poisson"
+plt.figure(num = 2)  # Figura Distribucion de Poisson
+t = np.linspace(0, 200, 100)
+mag = np.linspace(6, 8.5, 6)  # Mags de 6 a 8.5 de 0.5 en 0.5
+T = [];P1 = []
+for value in mag:
+    TD = 10 ** (a - b * value)
+    P = 1 - np.exp(-1 * t / TD)
+    plt.plot(t, P)
