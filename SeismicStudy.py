@@ -5,6 +5,7 @@ Created on Wed Nov 08 16:32:14 2017
 @author: David
 """
 import sys  # Me funciona para los tildes
+sys.setdefaultencoding('utf-8')
 import matplotlib.pyplot as plt
 import math
 import numpy as np
@@ -101,7 +102,6 @@ M2 = np.array([4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5])
 unos = np.ones_like(M2) 
 Gt = np.array([M2, unos])
 G = np.matrix.transpose(Gt)
-print G
 plt.figure(num = 1) # Figura Gunteber-Richter
 plt.plot(M, A, 'ro', label = 'Datos Conocidos')
 plt.title('Análisis de completitud del catálogo sísmico')
@@ -120,6 +120,7 @@ plt.plot(M2, arreglo, label = 'Ajuste linear')
 plt.legend()
 "Definicion de algunas funciones"
 def average(x):
+    "Simplemente el promedio"
     assert len(x) > 0
     return float(sum(x)) / len(x)
 
@@ -141,9 +142,10 @@ def pearson_def(x, y):
 
     return diffprod / math.sqrt(xdiff2 * ydiff2)
 R = (pearson_def(d, arreglo)) ** 2  # R^2
-o = math.sqrt((sum(d - arreglo) ** (2) / 9))  # Desviacion del ajuste
-ob = math.sqrt((9) / ((9 * sum(M2**2)) - (sum(M2)**2))) * o # Desviación de b
-oa = math.sqrt((sum(M2**2)) / ((9 * sum(M2**2)) - (sum(M2)**2))) * o # Desviacion de a
 print R
-print ob
+cov = np.linalg.inv(np.matmul(Gt, G))
+print cov
+oa = math.sqrt(cov[0][0])
 print oa
+ob = math.sqrt(cov[1][1])
+print ob
