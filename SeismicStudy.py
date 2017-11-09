@@ -113,8 +113,8 @@ bm = (log16 - log8) / 4.0  # A Y B MAXIMUM LIKEHOOD
 am = log8 + 4.5 * bm
 arregloult = np.linalg.lstsq(G, d)  # Mínimos cuadrados
 b, a = arregloult[0]
-print b  # b y a dados por mínimos cuadrados
-print a
+print 'b = ' + repr(b)  # b y a dados por mínimos cuadrados
+print 'a = ' + repr(a)
 arreglo = b * M2 + a
 plt.plot(M2, arreglo, label = 'Ajuste linear')
 plt.legend()
@@ -142,19 +142,22 @@ def pearson_def(x, y):
 
     return diffprod / math.sqrt(xdiff2 * ydiff2)
 R = (pearson_def(d, arreglo)) ** 2  # R^2
-print R
+print 'R^2 = ' + repr(R)
 cov = np.linalg.inv(np.matmul(Gt, G))
-print cov
 ob = math.sqrt(cov[0][0])
-print ob
+print 'ob = ' + repr(ob)
 oa = math.sqrt(cov[1][1])
-print oa
+print 'oa = ' + repr(oa)
 "Distribucion de Poisson"
 plt.figure(num = 2)  # Figura Distribucion de Poisson
-t = np.linspace(0, 200, 100)
+t = np.linspace(0, 150, 100)
 mag = np.linspace(6, 8.5, 6)  # Mags de 6 a 8.5 de 0.5 en 0.5
 T = [];P1 = []
 for value in mag:
-    TD = 10 ** (a - b * value)
-    P = 1 - np.exp(-1 * t / TD)
+    TD = 1 / (10 ** (a + b * value))  # b ya es negativo por eso +
+    P = 1 - np.exp(-t / TD)
+    print 'Años para magnitud ' + repr(value) + ': ' + repr(round(TD,1))
     plt.plot(t, P)
+plt.title('Distribución de Poisson')
+plt.xlabel('Años')
+plt.ylabel('Probabilidad de ocurrencia')
