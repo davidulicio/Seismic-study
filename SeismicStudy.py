@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Nov 08 16:32:14 2017
-
-@author: David
+@author: Davidulicio
 """
 import sys  # Me funciona para los tildes
+reload(sys)  # si falla la codificación reaplicar reload
 sys.setdefaultencoding('utf-8')
 import matplotlib.pyplot as plt
 import math
@@ -141,6 +140,8 @@ def pearson_def(x, y):
         ydiff2 += ydiff * ydiff
 
     return diffprod / math.sqrt(xdiff2 * ydiff2)
+
+"Fidelidad de la Gutenberg-Richter"
 R = (pearson_def(d, arreglo)) ** 2  # R^2
 print 'R^2 = ' + repr(R)
 cov = np.linalg.inv(np.matmul(Gt, G))
@@ -150,14 +151,17 @@ oa = math.sqrt(cov[1][1])
 print 'oa = ' + repr(oa)
 "Distribucion de Poisson"
 plt.figure(num = 2)  # Figura Distribucion de Poisson
-t = np.linspace(0, 150, 100)
+t = np.linspace(0, 100, 200)
 mag = np.linspace(6, 8.5, 6)  # Mags de 6 a 8.5 de 0.5 en 0.5
 T = [];P1 = []
 for value in mag:
     TD = 1 / (10 ** (a + b * value))  # b ya es negativo por eso +
     P = 1 - np.exp(-t / TD)
     print 'Años para magnitud ' + repr(value) + ': ' + repr(round(TD,1))
-    plt.plot(t, P)
+    plt.plot(t, P, label='Magnitud ' + repr(value) + ', Años: ' + repr(round(TD,1)))
 plt.title('Distribución de Poisson')
 plt.xlabel('Años')
 plt.ylabel('Probabilidad de ocurrencia')
+plt.legend()
+plt.show()
+"Distribuciones de Weibull"
